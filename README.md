@@ -1,87 +1,40 @@
-# Welcome to React Router!
+# Admin Dashboard
 
-A modern, production-ready template for building full-stack React applications using React Router.
+A simple and scalable React dashboard for managing users. Built with Vite, Tailwind CSS, and Zustand.
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/remix-run/react-router-templates/tree/main/default)
+## Setup
 
-## Features
+1. Install dependencies:
+   ```bash
+   npm install
+   ```
+2. Start the dev server:
+   ```bash
+   npm run dev
+   ```
+3. Build for production:
+   ```bash
+   npm run build
+   ```
 
-- 🚀 Server-side rendering
-- ⚡️ Hot Module Replacement (HMR)
-- 📦 Asset bundling and optimization
-- 🔄 Data loading and mutations
-- 🔒 TypeScript by default
-- 🎉 TailwindCSS for styling
-- 📖 [React Router docs](https://reactrouter.com/)
+## Key Decisions
 
-## Getting Started
+### Architecture
+I used a feature-based folder structure inside the `app/` directory to keep things organized:
+- `components/ui/`: Reusable UI elements like buttons and inputs.
+- `features/users/`: Everything related to the user list, search, and pagination.
+- `services/`: API call logic (kept separate from the UI).
+- `store/`: Zustand state for the search and pagination.
 
-### Installation
+### State Management
+I used **Zustand** for the global UI state (search and page number). It's much simpler than Redux and fits this project perfectly without adding too much boilerplate. For data fetching, I used a custom hook (`useUsers`) to handle loading and error states instead of putting that logic directly in the components.
 
-Install the dependencies:
+### Performance
+- **Code Splitting:** Used React Router v7's built-in routing to automatically lazy-load pages.
+- **Search Debouncing:** Added a `useDebounce` hook so the API isn't called on every single keystroke.
+- **URL Params:** Synced the search and pagination with the URL so that refreshing the page doesn't reset your filters.
 
-```bash
-npm install
-```
-
-### Development
-
-Start the development server with HMR:
-
-```bash
-npm run dev
-```
-
-Your application will be available at `http://localhost:5173`.
-
-## Building for Production
-
-Create a production build:
-
-```bash
-npm run build
-```
-
-## Deployment
-
-### Docker Deployment
-
-To build and run using Docker:
-
-```bash
-docker build -t my-app .
-
-# Run the container
-docker run -p 3000:3000 my-app
-```
-
-The containerized application can be deployed to any platform that supports Docker, including:
-
-- AWS ECS
-- Google Cloud Run
-- Azure Container Apps
-- Digital Ocean App Platform
-- Fly.io
-- Railway
-
-### DIY Deployment
-
-If you're familiar with deploying Node applications, the built-in app server is production-ready.
-
-Make sure to deploy the output of `npm run build`
-
-```
-├── package.json
-├── package-lock.json (or pnpm-lock.yaml, or bun.lockb)
-├── build/
-│   ├── client/    # Static assets
-│   └── server/    # Server-side code
-```
-
-## Styling
-
-This template comes with [Tailwind CSS](https://tailwindcss.com/) already configured for a simple default starting experience. You can use whatever CSS framework you prefer.
-
----
-
-Built with ❤️ using React Router.
+### Assumptions & Trade-offs
+- **Tailwind v4:** I used the new Tailwind v4 where the theme is configured directly in the CSS file. It's faster and avoids having a separate config file.
+- **No React Query:** I decided to write a custom fetching hook instead of using `react-query` to keep the bundle size small and because I don't know react-query.
+- **Native CSS:** I didn't use `clsx` or `tailwind-merge` to keep the styling logic straightforward and easy to read.
